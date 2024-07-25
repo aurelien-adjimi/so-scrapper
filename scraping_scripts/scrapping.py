@@ -9,7 +9,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
-from concurrent.futures import ThreadPoolExecutor, as_completed
+
 
 ### Fonction pour scraper le site avec BeautifulSoup ###
 def scrape_with_beautifulsoup(max_pages=100):
@@ -43,7 +43,7 @@ def scrape_with_beautifulsoup(max_pages=100):
                 answers = stats[1].find('span', class_='s-post-summary--stats-item-number').text.strip() if len(stats) > 1 else '0'
                 views = stats[2].find('span', class_='s-post-summary--stats-item-number').text.strip() if len(stats) > 2 else '0'
 
-                questions_data.append({ # Ajoute les données de chaque question à la liste
+                questions_data.append({
                     'title': title,
                     'link': f"https://stackoverflow.com{link}",
                     'summary': summary,
@@ -85,7 +85,7 @@ def scrape_with_selenium(max_pages=100):
             continue
 
         questions = driver.find_elements(By.CSS_SELECTOR, 'div[id^="question-summary-"]') # Trouve tous les éléments contenant les informations des questions.
-        print(f"Found {len(questions)} questions on page {page}")
+        # print(f"Found {len(questions)} questions on page {page}")
 
         for question in questions: # # Boucle qui va chercher tout le contenu de chaque question par les classes et le HTML et extrait ces informations
             try:
@@ -117,7 +117,7 @@ def scrape_with_selenium(max_pages=100):
                     'answers': answers,
                     'views': views
                 }
-                print(f"Scraped question: {question_data}")
+                # print(f"Scraped question: {question_data}")
                 questions_data.append(question_data)
             except Exception as e:
                 print(f"Error processing question: {e}")

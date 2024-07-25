@@ -1,7 +1,8 @@
-from scrapping import scrape_with_beautifulsoup, scrape_with_selenium
-from optimized_scrapping import scrape_with_optimized_beautifulsoup
-from api_scrapping import scrape_with_api
-from database import save_to_mongo
+from scraping_scripts.scrapping import scrape_with_beautifulsoup, scrape_with_selenium
+from scraping_scripts.optimized_scrapping import scrape_with_optimized_beautifulsoup
+from scraping_scripts.api_scrapping import scrape_with_api
+from bdd.database import save_to_mongo
+import time
 
 def main():
     print("Avec quelle méthode scraper le site ?")
@@ -24,6 +25,8 @@ def main():
             pages = 100
     else:
         pages = int(pages)
+    
+    start_time = time.time()
 
     if method == "1":
         print("Scraping with BeautifulSoup...")
@@ -40,7 +43,15 @@ def main():
     
     if data:
         save_to_mongo(data)
-        print("Scraping completed and data saved.")
+        end_time = time.time()
+        duration = end_time - start_time
+        method_name = {
+            "1": "BeautifulSoup",
+            "2": "Selenium",
+            "3": "Optimized BeautifulSoup",
+            "4": "API Stack Overflow"
+        }[method]
+        print(f"Votre programme a scrapé {pages} pages en {duration:.2f} secondes avec la méthode {method_name}.")
     else:
         print("No data scraped.")
 
